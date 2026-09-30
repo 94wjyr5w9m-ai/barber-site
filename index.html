@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<!--
+  ============================================================
+  PLACEHOLDERS TO REPLACE (use find & replace across this file)
+  ============================================================
+  [SHOP NAME]         Name of the barbershop (header, hero, footer, page title)
+  [BARBER NAME]       Barber's name (About section)
+  [ADDRESS]           Full street address (Contact section; also used in the
+                      Google Maps link — replace spaces with "+" inside the URL,
+                      e.g. 123+Main+St+City+ST)
+  [PHONE]             Phone number. Shown as text AND used in tel: links —
+                      inside href="tel:..." use digits only, e.g. tel:+15551234567
+  [INSTAGRAM]         Instagram handle without the @ (used in the link URL and label)
+  [BOOKING LINK]      Full URL to your online booking page (every "Book" button)
+  [CANCELLATION FEE]  Fee charged for late cancellations / no-shows, e.g. $25
+  [PRICE]             Price for each service (6 spots in the Services menu)
+  [MIN]               Duration in minutes for each service (6 spots)
+
+  Also replace: the 6 gallery placeholders (see "GALLERY" comment) with <img> tags,
+  and the About photo placeholder.
+  ============================================================
+-->
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>[SHOP NAME] — Barbershop</title>
+  <meta name="description" content="[SHOP NAME] — precision cuts, fades and beard work. Book online.">
+  <meta name="theme-color" content="#0f0f0f">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+  <style>
+    /* ---------- Tokens ---------- */
+    :root {
+      --black: #0f0f0f;
+      --ink: #1a1a1a;
+      --off-white: #f6f3ee;
+      --paper: #fbf9f5;
+      --gold: #b8955a;
+      --gold-soft: rgba(184, 149, 90, 0.35);
+      --muted: #6f6a63;
+      --line: rgba(15, 15, 15, 0.12);
+      --line-light: rgba(246, 243, 238, 0.16);
+
+      --serif: "Cormorant Garamond", "Times New Roman", serif;
+      --sans: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+
+      --gutter: 1.5rem;
+      --max: 1100px;
+      --section-y: 6rem;
+      --ease: cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    @media (min-width: 768px) {
+      :root { --gutter: 2.5rem; --section-y: 8.5rem; }
+    }
+
+    /* ---------- Base ---------- */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+    body {
+      font-family: var(--sans);
+      font-weight: 300;
+      font-size: 1rem;
+      line-height: 1.7;
+      color: var(--ink);
+      background: var(--off-white);
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+    img { max-width: 100%; display: block; }
+    a { color: inherit; text-decoration: none; }
+    :focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
+
+    .container { width: 100%; max-width: var(--max); margin: 0 auto; padding: 0 var(--gutter); }
+    section { padding: var(--section-y) 0; scroll-margin-top: 64px; }
+
+    h1, h2, h3 { font-family: var(--serif); font-weight: 500; line-height: 1.1; letter-spacing: -0.01em; }
+
+    .eyebrow {
+      display: inline-flex; align-items: center; gap: 0.75rem;
+      font-size: 0.7rem; font-weight: 500; letter-spacing: 0.3em; text-transform: uppercase;
+      color: var(--gold); margin-bottom: 1.25rem;
+    }
+    .eyebrow::before { content: ""; width: 28px; height: 1px; background: var(--gold); }
+
+    .section-title { font-size: clamp(2.25rem, 7vw, 3.5rem); margin-bottom: 1.25rem; }
+    .section-lead { color: var(--muted); max-width: 34rem; }
+    .center { text-align: center; }
+    .center .eyebrow { justify-content: center; }
+    .center .section-lead { margin-left: auto; margin-right: auto; }
+
+    /* ---------- Buttons ---------- */
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: 0.6rem;
+      min-height: 48px; padding: 0.9rem 2rem;
+      font-family: var(--sans); font-size: 0.75rem; font-weight: 500;
+      letter-spacing: 0.2em; text-transform: uppercase;
+      border: 1px solid var(--gold); border-radius: 0;
+      background: var(--gold); color: var(--black);
+      transition: background 0.4s var(--ease), color 0.4s var(--ease), transform 0.4s var(--ease);
+      cursor: pointer;
+    }
+    .btn:hover { background: transparent; color: var(--gold); }
+    .btn:active { transform: scale(0.98); }
+    .btn-ghost { background: transparent; color: var(--off-white); border-color: var(--line-light); }
+    .btn-ghost:hover { border-color: var(--gold); color: var(--gold); }
+    .btn-lg { min-height: 60px; padding: 1.2rem 3rem; font-size: 0.8rem; }
+    .btn .arrow { transition: transform 0.4s var(--ease); }
+    .btn:hover .arrow { transform: translateX(4px); }
+
+    /* ---------- 1. Preview banner ---------- */
+    .preview-banner {
+      background: var(--gold); color: var(--black);
+      text-align: center; font-size: 0.68rem; font-weight: 500;
+      letter-spacing: 0.22em; text-transform: uppercase;
+      padding: 0.45rem var(--gutter);
+    }
+
+    /* ---------- 2. Header ---------- */
+    .site-header {
+      position: sticky; top: 0; z-index: 50;
+      background: rgba(15, 15, 15, 0.92);
+      -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--line-light);
+      transition: box-shadow 0.4s var(--ease);
+    }
+    .site-header.scrolled { box-shadow: 0 8px 30px rgba(0, 0, 0, 0.25); }
+    .header-inner { display: flex; align-items: center; justify-content: space-between; height: 64px; gap: 1rem; }
+    .logo {
+      font-family: var(--serif); font-size: 1.35rem; font-weight: 600;
+      letter-spacing: 0.08em; color: var(--off-white); white-space: nowrap;
+      overflow: hidden; text-overflow: ellipsis;
+    }
+    .logo span { color: var(--gold); }
+    .site-header .btn { min-height: 40px; padding: 0.6rem 1.25rem; font-size: 0.68rem; flex-shrink: 0; }
+
+    /* ---------- 3. Hero ---------- */
+    .hero {
+      position: relative; background: var(--black); color: var(--off-white);
+      min-height: calc(100svh - 64px - 28px);
+      display: flex; align-items: center;
+      padding: 5rem 0 6rem; overflow: hidden;
+    }
+    .hero::before {
+      content: ""; position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse 80% 60% at 85% 10%, rgba(184, 149, 90, 0.14), transparent 60%),
+        radial-gradient(ellipse 60% 50% at 0% 100%, rgba(184, 149, 90, 0.08), transparent 60%);
+      pointer-events: none;
+    }
+    .hero .container { position: relative; }
+    .hero h1 {
+      font-size: clamp(3rem, 13vw, 6.5rem); font-weight: 400;
+      line-height: 0.98; margin-bottom: 1.75rem; max-width: 12ch;
+    }
+    .hero h1 em { font-style: italic; color: var(--gold); }
+    .hero-tagline {
+      font-size: 1.05rem; color: rgba(246, 243, 238, 0.7);
+      max-width: 26rem; margin-bottom: 2.75rem;
+    }
+    .hero-actions { display: flex; flex-wrap: wrap; gap: 1rem; }
+    .hero-meta {
+      margin-top: 4rem; padding-top: 2rem; border-top: 1px solid var(--line-light);
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; max-width: 34rem;
+    }
+    .hero-meta div { font-size: 0.68rem; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(246, 243, 238, 0.5); }
+    .hero-meta strong { display: block; font-family: var(--serif); font-size: 1.5rem; font-weight: 500; letter-spacing: 0; text-transform: none; color: var(--off-white); margin-bottom: 0.2rem; }
+    .scroll-cue {
+      position: absolute; left: 50%; bottom: 1.75rem; transform: translateX(-50%);
+      width: 1px; height: 44px; background: var(--line-light); overflow: hidden;
+    }
+    .scroll-cue::after {
+      content: ""; position: absolute; left: 0; top: -44px; width: 1px; height: 44px;
+      background: var(--gold); animation: cue 2.4s var(--ease) infinite;
+    }
+    @keyframes cue { to { top: 44px; } }
+
+    /* ---------- 4. Services menu ---------- */
+    .services { background: var(--paper); }
+    .menu {
+      margin-top: 3.5rem; max-width: 820px; margin-left: auto; margin-right: auto;
+      display: grid; gap: 3.5rem;
+    }
+    @media (min-width: 900px) {
+      .menu { max-width: none; grid-template-columns: 1fr 1fr; gap: 5rem; }
+    }
+    .menu-group-title {
+      display: flex; align-items: center; gap: 1rem;
+      font-family: var(--serif); font-size: 1.1rem; font-weight: 600;
+      letter-spacing: 0.4em; color: var(--black); margin-bottom: 1.75rem;
+    }
+    .menu-group-title::after { content: ""; flex: 1; height: 1px; background: var(--gold-soft); }
+    .menu-item { padding: 1.25rem 0; border-bottom: 1px solid var(--line); }
+    .menu-item:last-child { border-bottom: none; }
+    .menu-row { display: flex; align-items: baseline; gap: 0.75rem; }
+    .menu-name { font-family: var(--serif); font-size: 1.4rem; font-weight: 500; color: var(--black); }
+    .menu-dots { flex: 1; border-bottom: 1px dotted rgba(15, 15, 15, 0.3); transform: translateY(-5px); min-width: 1.5rem; }
+    .menu-price { font-family: var(--serif); font-size: 1.35rem; font-weight: 500; color: var(--gold); white-space: nowrap; }
+    .menu-detail { display: flex; justify-content: space-between; gap: 1rem; margin-top: 0.25rem; font-size: 0.85rem; color: var(--muted); }
+    .menu-time { font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase; white-space: nowrap; }
+    .menu-note { margin-top: 3.5rem; font-size: 0.8rem; color: var(--muted); font-style: italic; }
+
+    /* ---------- 5. Booking ---------- */
+    .booking { background: var(--black); color: var(--off-white); }
+    .booking .section-lead { color: rgba(246, 243, 238, 0.65); }
+    .steps {
+      list-style: none; margin: 3.5rem auto; max-width: 900px;
+      display: grid; gap: 2.5rem; counter-reset: step; text-align: left;
+    }
+    @media (min-width: 768px) { .steps { grid-template-columns: repeat(3, 1fr); gap: 2rem; } }
+    .steps li { counter-increment: step; padding-top: 1.5rem; border-top: 1px solid var(--line-light); }
+    .steps li::before {
+      content: "0" counter(step);
+      display: block; font-family: var(--serif); font-size: 2.25rem; font-style: italic;
+      color: var(--gold); line-height: 1; margin-bottom: 0.9rem;
+    }
+    .steps h3 { font-size: 1.4rem; margin-bottom: 0.4rem; }
+    .steps p { font-size: 0.9rem; color: rgba(246, 243, 238, 0.6); }
+    .booking-cta { display: flex; flex-direction: column; align-items: center; gap: 1rem; }
+    .booking-cta small { font-size: 0.75rem; color: rgba(246, 243, 238, 0.45); letter-spacing: 0.05em; }
+    @media (max-width: 480px) { .booking-cta .btn { width: 100%; } }
+
+    /* ---------- 6. Policy ---------- */
+    .policy-card {
+      position: relative; max-width: 760px; margin: 0 auto;
+      background: var(--paper); border: 1px solid var(--gold-soft);
+      padding: 3rem 1.75rem;
+    }
+    @media (min-width: 768px) { .policy-card { padding: 4rem 4.5rem; } }
+    .policy-card::before, .policy-card::after {
+      content: ""; position: absolute; width: 22px; height: 22px; border: 1px solid var(--gold);
+    }
+    .policy-card::before { top: -6px; left: -6px; border-right: none; border-bottom: none; }
+    .policy-card::after { bottom: -6px; right: -6px; border-left: none; border-top: none; }
+    .policy-list { list-style: none; margin-top: 2.25rem; display: grid; gap: 1.75rem; }
+    .policy-list li { display: grid; grid-template-columns: auto 1fr; gap: 1.25rem; align-items: start; }
+    .policy-icon {
+      width: 44px; height: 44px; border: 1px solid var(--gold-soft); border-radius: 50%;
+      display: grid; place-items: center; color: var(--gold);
+    }
+    .policy-icon svg { width: 18px; height: 18px; }
+    .policy-list h3 { font-size: 1.3rem; margin-bottom: 0.25rem; color: var(--black); }
+    .policy-list p { font-size: 0.92rem; color: var(--muted); }
+    .policy-list strong { font-weight: 600; color: var(--black); }
+    .fee { color: var(--gold) !important; }
+
+    /* ---------- 7. Gallery ---------- */
+    .gallery { background: var(--paper); }
+    .gallery-grid {
+      margin-top: 3.5rem; display: grid; gap: 0.75rem;
+      grid-template-columns: repeat(2, 1fr);
+    }
+    @media (min-width: 768px) { .gallery-grid { grid-template-columns: repeat(3, 1fr); gap: 1rem; } }
+    .gallery-item {
+      position: relative; aspect-ratio: 4 / 5; overflow: hidden;
+      background: linear-gradient(145deg, #e9e4dc, #dcd5ca);
+    }
+    .gallery-item img { width: 100%; height: 100%; object-fit: cover; transition: transform 1.2s var(--ease); }
+    .gallery-item:hover img { transform: scale(1.04); }
+    .gallery-placeholder {
+      position: absolute; inset: 0; display: flex; flex-direction: column;
+      align-items: center; justify-content: center; gap: 0.6rem;
+      color: rgba(15, 15, 15, 0.35); font-size: 0.65rem; letter-spacing: 0.25em; text-transform: uppercase;
+    }
+    .gallery-placeholder svg { width: 28px; height: 28px; stroke: var(--gold); opacity: 0.7; }
+    .gallery-placeholder b { font-family: var(--serif); font-size: 1.5rem; font-weight: 400; letter-spacing: 0; color: rgba(15, 15, 15, 0.3); font-style: italic; }
+    .gallery-foot { margin-top: 2rem; text-align: center; }
+    .text-link {
+      font-size: 0.75rem; font-weight: 500; letter-spacing: 0.2em; text-transform: uppercase;
+      color: var(--black); border-bottom: 1px solid var(--gold); padding-bottom: 0.3rem;
+      transition: color 0.3s var(--ease);
+    }
+    .text-link:hover { color: var(--gold); }
+
+    /* ---------- 8. About ---------- */
+    .about-grid { display: grid; gap: 3rem; align-items: center; }
+    @media (min-width: 900px) { .about-grid { grid-template-columns: 5fr 6fr; gap: 5rem; } }
+    .about-photo {
+      position: relative; aspect-ratio: 4 / 5; background: var(--black);
+      display: grid; place-items: center; color: rgba(246, 243, 238, 0.35);
+      font-size: 0.65rem; letter-spacing: 0.25em; text-transform: uppercase;
+    }
+    .about-photo::after {
+      content: ""; position: absolute; inset: 14px; border: 1px solid var(--gold-soft); pointer-events: none;
+    }
+    .about-photo img { width: 100%; height: 100%; object-fit: cover; }
+    .about-text p { color: var(--muted); margin-bottom: 1.25rem; }
+    .about-text .quote {
+      font-family: var(--serif); font-size: 1.6rem; font-style: italic; line-height: 1.35;
+      color: var(--black); border-left: 1px solid var(--gold); padding-left: 1.25rem; margin: 2rem 0;
+    }
+    .signature { font-family: var(--serif); font-size: 1.9rem; font-style: italic; color: var(--gold); }
+
+    /* ---------- 9. Hours ---------- */
+    .hours { background: var(--black); color: var(--off-white); padding: 5rem 0; }
+    .hours-inner { display: grid; gap: 2rem; align-items: center; }
+    @media (min-width: 768px) { .hours-inner { grid-template-columns: 1fr auto; gap: 4rem; } }
+    .hours h2 { font-size: clamp(2rem, 6vw, 2.75rem); margin-bottom: 0.75rem; }
+    .hours p { color: rgba(246, 243, 238, 0.65); max-width: 36rem; }
+
+    /* ---------- 10. Contact ---------- */
+    .contact-list { margin-top: 3rem; display: grid; border-top: 1px solid var(--line); }
+    @media (min-width: 768px) { .contact-list { grid-template-columns: repeat(3, 1fr); border-top: none; gap: 1.5rem; } }
+    .contact-item {
+      display: flex; align-items: center; gap: 1.25rem;
+      padding: 1.5rem 0; border-bottom: 1px solid var(--line);
+      transition: color 0.3s var(--ease);
+    }
+    @media (min-width: 768px) {
+      .contact-item {
+        flex-direction: column; align-items: flex-start; gap: 1.25rem;
+        padding: 2rem; border: 1px solid var(--line); background: var(--paper);
+        transition: border-color 0.4s var(--ease), transform 0.4s var(--ease);
+      }
+      .contact-item:hover { border-color: var(--gold); transform: translateY(-3px); }
+    }
+    .contact-icon {
+      flex-shrink: 0; width: 48px; height: 48px; border-radius: 50%;
+      border: 1px solid var(--gold-soft); display: grid; place-items: center; color: var(--gold);
+    }
+    .contact-icon svg { width: 20px; height: 20px; }
+    .contact-label { display: block; font-size: 0.68rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--muted); margin-bottom: 0.2rem; }
+    .contact-value { font-family: var(--serif); font-size: 1.35rem; font-weight: 500; color: var(--black); line-height: 1.3; word-break: break-word; }
+    .contact-item:hover .contact-value { color: var(--gold); }
+
+    /* ---------- 11. Footer ---------- */
+    .site-footer { background: var(--black); color: rgba(246, 243, 238, 0.5); padding: 4rem 0 2.5rem; text-align: center; }
+    .site-footer .logo { display: inline-block; font-size: 1.75rem; margin-bottom: 1rem; }
+    .footer-links { display: flex; justify-content: center; flex-wrap: wrap; gap: 0.5rem 1.75rem; margin: 1.5rem 0 2.5rem; }
+    .footer-links a { font-size: 0.7rem; letter-spacing: 0.22em; text-transform: uppercase; color: rgba(246, 243, 238, 0.7); transition: color 0.3s; }
+    .footer-links a:hover { color: var(--gold); }
+    .footer-bottom { padding-top: 2rem; border-top: 1px solid var(--line-light); font-size: 0.75rem; }
+
+    /* Space so the mobile sticky CTA never covers the footer */
+    @media (max-width: 767px) { body { padding-bottom: 76px; } }
+
+    /* Mobile floating book bar */
+    .mobile-cta {
+      position: fixed; left: 0; right: 0; bottom: 0; z-index: 40;
+      padding: 0.75rem var(--gutter) calc(0.75rem + env(safe-area-inset-bottom));
+      background: rgba(15, 15, 15, 0.95);
+      -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
+      border-top: 1px solid var(--line-light);
+      transform: translateY(110%); transition: transform 0.5s var(--ease);
+    }
+    .mobile-cta.show { transform: none; }
+    .mobile-cta .btn { width: 100%; }
+    @media (min-width: 768px) { .mobile-cta { display: none; } }
+
+    /* ---------- Scroll reveal ---------- */
+    .js .reveal {
+      opacity: 0; transform: translateY(24px);
+      transition: opacity 1s var(--ease), transform 1s var(--ease);
+      transition-delay: var(--d, 0s);
+    }
+    .js .reveal.in { opacity: 1; transform: none; }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after { animation: none !important; transition: none !important; }
+      .js .reveal { opacity: 1; transform: none; }
+    }
+  </style>
+  <script>document.documentElement.classList.add('js');</script>
+</head>
+<body>
+
+  <!-- 1. PREVIEW BANNER -->
+  <div class="preview-banner">Preview — built by Eli</div>
+
+  <!-- 2. STICKY HEADER -->
+  <header class="site-header" id="top">
+    <div class="container header-inner">
+      <a href="#top" class="logo">[SHOP NAME]<span>.</span></a>
+      <a href="[BOOKING LINK]" class="btn" target="_blank" rel="noopener">Book Now</a>
+    </div>
+  </header>
+
+  <main>
+    <!-- 3. HERO -->
+    <section class="hero" aria-label="Introduction">
+      <div class="container">
+        <p class="eyebrow reveal">[SHOP NAME] · Barbershop</p>
+        <h1 class="reveal" style="--d:.1s">Sharp cuts. <em>Clean</em> lines.</h1>
+        <p class="hero-tagline reveal" style="--d:.2s">Precision haircuts, fades and beard work — done with care, one client at a time.</p>
+        <div class="hero-actions reveal" style="--d:.3s">
+          <a href="[BOOKING LINK]" class="btn btn-lg" target="_blank" rel="noopener">Book Your Cut <span class="arrow">→</span></a>
+          <a href="#services" class="btn btn-ghost btn-lg">View Services</a>
+        </div>
+        <div class="hero-meta reveal" style="--d:.4s">
+          <div><strong>Cuts</strong>Hair</div>
+          <div><strong>Beards</strong>Grooming</div>
+          <div><strong>Online</strong>Booking</div>
+        </div>
+      </div>
+      <span class="scroll-cue" aria-hidden="true"></span>
+    </section>
+
+    <!-- 4. SERVICES MENU -->
+    <section class="services" id="services">
+      <div class="container">
+        <div class="center">
+          <p class="eyebrow reveal">The Menu</p>
+          <h2 class="section-title reveal">Services</h2>
+          <p class="section-lead reveal">Every service includes a consultation and a finish styled to you.</p>
+        </div>
+
+        <div class="menu">
+          <!-- HAIR -->
+          <div class="menu-group reveal">
+            <h3 class="menu-group-title">HAIR</h3>
+
+            <div class="menu-item">
+              <div class="menu-row">
+                <span class="menu-name">Haircut</span><span class="menu-dots"></span><span class="menu-price">[PRICE]</span>
+              </div>
+              <div class="menu-detail"><span>Classic or modern cut, styled to finish</span><span class="menu-time">[MIN] min</span></div>
+            </div>
+
+            <div class="menu-item">
+              <div class="menu-row">
+                <span class="menu-name">Skin Fade</span><span class="menu-dots"></span><span class="menu-price">[PRICE]</span>
+              </div>
+              <div class="menu-detail"><span>Seamless fade down to the skin</span><span class="menu-time">[MIN] min</span></div>
+            </div>
+
+            <div class="menu-item">
+              <div class="menu-row">
+                <span class="menu-name">Kids Cut</span><span class="menu-dots"></span><span class="menu-price">[PRICE]</span>
+              </div>
+              <div class="menu-detail"><span>For clients 12 and under</span><span class="menu-time">[MIN] min</span></div>
+            </div>
+          </div>
+
+          <!-- BEARD -->
+          <div class="menu-group reveal" style="--d:.15s">
+            <h3 class="menu-group-title">BEARD</h3>
+
+            <div class="menu-item">
+              <div class="menu-row">
+                <span class="menu-name">Beard Trim</span><span class="menu-dots"></span><span class="menu-price">[PRICE]</span>
+              </div>
+              <div class="menu-detail"><span>Shape, length and tidy-up</span><span class="menu-time">[MIN] min</span></div>
+            </div>
+
+            <div class="menu-item">
+              <div class="menu-row">
+                <span class="menu-name">Beard Shape-Up with Hot Towel</span><span class="menu-dots"></span><span class="menu-price">[PRICE]</span>
+              </div>
+              <div class="menu-detail"><span>Razor-lined edges, hot towel finish</span><span class="menu-time">[MIN] min</span></div>
+            </div>
+
+            <div class="menu-item">
+              <div class="menu-row">
+                <span class="menu-name">Haircut + Beard Combo</span><span class="menu-dots"></span><span class="menu-price">[PRICE]</span>
+              </div>
+              <div class="menu-detail"><span>The full service, head to chin</span><span class="menu-time">[MIN] min</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. BOOKING -->
+    <section class="booking" id="booking">
+      <div class="container center">
+        <p class="eyebrow reveal">Reservations</p>
+        <h2 class="section-title reveal">Book online in minutes</h2>
+        <p class="section-lead reveal">All appointments are booked online — no calls or DMs needed.</p>
+
+        <ol class="steps">
+          <li class="reveal">
+            <h3>Choose a service</h3>
+            <p>Pick your cut or beard service from the menu.</p>
+          </li>
+          <li class="reveal" style="--d:.1s">
+            <h3>Pick a time</h3>
+            <p>See real-time availability and choose what works for you.</p>
+          </li>
+          <li class="reveal" style="--d:.2s">
+            <h3>Confirm</h3>
+            <p>Enter your details and you'll get a confirmation right away.</p>
+          </li>
+        </ol>
+
+        <div class="booking-cta reveal">
+          <a href="[BOOKING LINK]" class="btn btn-lg" target="_blank" rel="noopener">Book Now <span class="arrow">→</span></a>
+          <small>Please review the booking policy below before booking.</small>
+        </div>
+      </div>
+    </section>
+
+    <!-- 6. BOOKING POLICY -->
+    <section class="policy" id="policy">
+      <div class="container">
+        <div class="policy-card reveal">
+          <div class="center">
+            <p class="eyebrow">Please Note</p>
+            <h2 class="section-title">Booking Policy</h2>
+          </div>
+          <ul class="policy-list">
+            <li>
+              <span class="policy-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="1"/><path d="M16 2v4M8 2v4M3 10h18M10 14l4 4M14 14l-4 4"/></svg>
+              </span>
+              <div>
+                <h3>Cancellations &amp; No-Shows</h3>
+                <p>Cancellations made with <strong>less than 24 hours' notice</strong>, and no-shows, are charged <strong class="fee">[CANCELLATION FEE]</strong>.</p>
+              </div>
+            </li>
+            <li>
+              <span class="policy-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+              </span>
+              <div>
+                <h3>Late Arrivals</h3>
+                <p>Clients arriving <strong>more than 10 minutes late</strong> may need to reschedule, so every appointment stays on time.</p>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- 7. GALLERY
+         To add photos: replace each <div class="gallery-placeholder">…</div>
+         with <img src="your-photo.jpg" alt="Short description of the cut" loading="lazy"> -->
+    <section class="gallery" id="gallery">
+      <div class="container">
+        <div class="center">
+          <p class="eyebrow reveal">Portfolio</p>
+          <h2 class="section-title reveal">Recent Work</h2>
+        </div>
+
+        <div class="gallery-grid">
+          <figure class="gallery-item reveal">
+            <div class="gallery-placeholder"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.2"><rect x="3" y="3" width="18" height="18"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg><b>01</b>Photo</div>
+          </figure>
+          <figure class="gallery-item reveal" style="--d:.08s">
+            <div class="gallery-placeholder"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.2"><rect x="3" y="3" width="18" height="18"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg><b>02</b>Photo</div>
+          </figure>
+          <figure class="gallery-item reveal" style="--d:.16s">
+            <div class="gallery-placeholder"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.2"><rect x="3" y="3" width="18" height="18"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg><b>03</b>Photo</div>
+          </figure>
+          <figure class="gallery-item reveal">
+            <div class="gallery-placeholder"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.2"><rect x="3" y="3" width="18" height="18"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg><b>04</b>Photo</div>
+          </figure>
+          <figure class="gallery-item reveal" style="--d:.08s">
+            <div class="gallery-placeholder"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.2"><rect x="3" y="3" width="18" height="18"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg><b>05</b>Photo</div>
+          </figure>
+          <figure class="gallery-item reveal" style="--d:.16s">
+            <div class="gallery-placeholder"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.2"><rect x="3" y="3" width="18" height="18"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg><b>06</b>Photo</div>
+          </figure>
+        </div>
+
+        <div class="gallery-foot reveal">
+          <a href="https://instagram.com/[INSTAGRAM]" class="text-link" target="_blank" rel="noopener">More on Instagram</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- 8. ABOUT -->
+    <section class="about" id="about">
+      <div class="container about-grid">
+        <!-- Replace the text inside with <img src="barber.jpg" alt="[BARBER NAME]"> -->
+        <div class="about-photo reveal">Barber Photo</div>
+
+        <div class="about-text">
+          <p class="eyebrow reveal">Meet Your Barber</p>
+          <h2 class="section-title reveal">[BARBER NAME]</h2>
+          <p class="reveal">Behind every cut at [SHOP NAME] is [BARBER NAME] — a barber focused on clean technique, sharp detail and making every client feel at ease in the chair.</p>
+          <p class="quote reveal">"A great cut isn't rushed. It's listened to, then built with intention."</p>
+          <p class="reveal">From timeless classics to modern fades and beard work, each appointment is one-on-one, unhurried and tailored to how you actually wear your hair.</p>
+          <p class="signature reveal">— [BARBER NAME]</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 9. HOURS -->
+    <section class="hours" id="hours">
+      <div class="container hours-inner">
+        <div class="reveal">
+          <p class="eyebrow">Hours</p>
+          <h2>Availability changes weekly</h2>
+          <p>Hours vary from week to week. For the most up-to-date open times, check the booking page — it always shows live availability.</p>
+        </div>
+        <div class="reveal" style="--d:.1s">
+          <a href="[BOOKING LINK]" class="btn btn-lg" target="_blank" rel="noopener">See Open Times <span class="arrow">→</span></a>
+        </div>
+      </div>
+    </section>
+
+    <!-- 10. CONTACT -->
+    <section class="contact" id="contact">
+      <div class="container">
+        <div class="center">
+          <p class="eyebrow reveal">Find Us</p>
+          <h2 class="section-title reveal">Contact</h2>
+        </div>
+
+        <div class="contact-list">
+          <!-- In the URL below, replace [ADDRESS] with your address using "+" for spaces -->
+          <a class="contact-item reveal" href="https://www.google.com/maps/search/?api=1&amp;query=[ADDRESS]" target="_blank" rel="noopener">
+            <span class="contact-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s7-6.2 7-12a7 7 0 1 0-14 0c0 5.8 7 12 7 12z"/><circle cx="12" cy="10" r="2.5"/></svg>
+            </span>
+            <span><span class="contact-label">Visit</span><span class="contact-value">[ADDRESS]</span></span>
+          </a>
+
+          <!-- In href, use digits only, e.g. tel:+15551234567 -->
+          <a class="contact-item reveal" style="--d:.1s" href="tel:[PHONE]">
+            <span class="contact-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 1.9.7 2.8a2 2 0 0 1-.5 2.1L8 9.9a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.8.7a2 2 0 0 1 1.7 2z"/></svg>
+            </span>
+            <span><span class="contact-label">Call</span><span class="contact-value">[PHONE]</span></span>
+          </a>
+
+          <a class="contact-item reveal" style="--d:.2s" href="https://instagram.com/[INSTAGRAM]" target="_blank" rel="noopener">
+            <span class="contact-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r=".6" fill="currentColor"/></svg>
+            </span>
+            <span><span class="contact-label">Follow</span><span class="contact-value">@[INSTAGRAM]</span></span>
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- 11. FOOTER -->
+  <footer class="site-footer">
+    <div class="container">
+      <a href="#top" class="logo">[SHOP NAME]<span>.</span></a>
+      <nav class="footer-links" aria-label="Footer">
+        <a href="#services">Services</a>
+        <a href="#booking">Book</a>
+        <a href="#policy">Policy</a>
+        <a href="#gallery">Gallery</a>
+        <a href="#contact">Contact</a>
+      </nav>
+      <div class="footer-bottom">
+        © <span id="year">2026</span> [SHOP NAME]. All rights reserved.
+      </div>
+    </div>
+  </footer>
+
+  <!-- Mobile floating "Book Now" bar (appears after scrolling past the hero) -->
+  <div class="mobile-cta" id="mobileCta">
+    <a href="[BOOKING LINK]" class="btn" target="_blank" rel="noopener">Book Now <span class="arrow">→</span></a>
+  </div>
+
+  <script>
+    (function () {
+      // Scroll reveal
+      var items = document.querySelectorAll('.reveal');
+      if ('IntersectionObserver' in window) {
+        var io = new IntersectionObserver(function (entries) {
+          entries.forEach(function (e) {
+            if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
+          });
+        }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+        items.forEach(function (el) { io.observe(el); });
+      } else {
+        items.forEach(function (el) { el.classList.add('in'); });
+      }
+
+      // Header shadow + mobile CTA visibility
+      var header = document.querySelector('.site-header');
+      var hero = document.querySelector('.hero');
+      var cta = document.getElementById('mobileCta');
+      function onScroll() {
+        var y = window.scrollY;
+        header.classList.toggle('scrolled', y > 10);
+        var heroEnd = hero.offsetTop + hero.offsetHeight - 80;
+        var nearBottom = window.innerHeight + y >= document.body.scrollHeight - 40;
+        cta.classList.toggle('show', y > heroEnd && !nearBottom);
+      }
+      window.addEventListener('scroll', onScroll, { passive: true });
+      onScroll();
+
+      document.getElementById('year').textContent = new Date().getFullYear();
+    })();
+  </script>
+</body>
+</html>
