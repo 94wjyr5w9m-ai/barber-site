@@ -11,7 +11,12 @@
   [PHONE]             Phone number. Shown as text AND used in tel: links —
                       inside href="tel:..." use digits only, e.g. tel:+15551234567
   [INSTAGRAM]         Instagram handle without the @ (used in the link URL and label)
-  [BOOKING LINK]      Full URL to your online booking page (every "Book" button)
+  [PHONE NUMBER]      Number that booking texts go to, digits only, e.g. +15551234567
+                      (appears in the booking buttons and in BOOKING SETUP at the
+                      bottom of this file)
+  [BOOKING LINK]      Your online booking URL, once you have one. Paste it into
+                      BOOKING_LINK in the BOOKING SETUP block at the bottom of this
+                      file. Until then, every booking button opens a text message.
   [CANCELLATION FEE]  Fee charged for late cancellations / no-shows, e.g. $25
   [PRICE]             Price for each service (6 spots in the Services menu)
   [MIN]               Duration in minutes for each service (6 spots)
@@ -24,7 +29,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <title>[SHOP NAME] — Barbershop</title>
+  <title>[SHOP NAME] | Barbershop</title>
   <meta name="description" content="[SHOP NAME] — precision cuts, fades and beard work. Book online.">
   <meta name="theme-color" content="#0f0f0f">
 
@@ -376,7 +381,7 @@
   <header class="site-header" id="top">
     <div class="container header-inner">
       <a href="#top" class="logo">[SHOP NAME]<span>.</span></a>
-      <a href="[BOOKING LINK]" class="btn" target="_blank" rel="noopener">Book Now</a>
+      <a href="sms:[PHONE NUMBER]?&amp;body=Hi%2C%20I%27d%20like%20to%20book%20a%20cut." data-book class="btn">Book Now</a>
     </div>
   </header>
 
@@ -388,7 +393,7 @@
         <h1 class="reveal" style="--d:.1s">Sharp cuts. <em>Clean</em> lines.</h1>
         <p class="hero-tagline reveal" style="--d:.2s">Precision haircuts, fades and beard work — done with care, one client at a time.</p>
         <div class="hero-actions reveal" style="--d:.3s">
-          <a href="[BOOKING LINK]" class="btn btn-lg" target="_blank" rel="noopener">Book Your Cut <span class="arrow">→</span></a>
+          <a href="sms:[PHONE NUMBER]?&amp;body=Hi%2C%20I%27d%20like%20to%20book%20a%20cut." data-book class="btn btn-lg">Book Your Cut <span class="arrow">→</span></a>
           <a href="#services" class="btn btn-ghost btn-lg">View Services</a>
         </div>
         <div class="hero-meta reveal" style="--d:.4s">
@@ -488,7 +493,7 @@
         </ol>
 
         <div class="booking-cta reveal">
-          <a href="[BOOKING LINK]" class="btn btn-lg" target="_blank" rel="noopener">Book Now <span class="arrow">→</span></a>
+          <a href="sms:[PHONE NUMBER]?&amp;body=Hi%2C%20I%27d%20like%20to%20book%20a%20cut." data-book class="btn btn-lg">Book Now <span class="arrow">→</span></a>
           <small>Please review the booking policy below before booking.</small>
         </div>
       </div>
@@ -589,7 +594,7 @@
           <p>Hours vary from week to week. For the most up-to-date open times, check the booking page — it always shows live availability.</p>
         </div>
         <div class="reveal" style="--d:.1s">
-          <a href="[BOOKING LINK]" class="btn btn-lg" target="_blank" rel="noopener">See Open Times <span class="arrow">→</span></a>
+          <a href="sms:[PHONE NUMBER]?&amp;body=Hi%2C%20I%27d%20like%20to%20book%20a%20cut." data-book class="btn btn-lg">See Open Times <span class="arrow">→</span></a>
         </div>
       </div>
     </section>
@@ -649,11 +654,33 @@
 
   <!-- Mobile floating "Book Now" bar (appears after scrolling past the hero) -->
   <div class="mobile-cta" id="mobileCta">
-    <a href="[BOOKING LINK]" class="btn" target="_blank" rel="noopener">Book Now <span class="arrow">→</span></a>
+    <a href="sms:[PHONE NUMBER]?&amp;body=Hi%2C%20I%27d%20like%20to%20book%20a%20cut." data-book class="btn">Book Now <span class="arrow">→</span></a>
   </div>
 
   <script>
+    // ================= BOOKING SETUP =================
+    // Every booking button (Book Now, Book Your Cut, See Open Times) uses this.
+    // No booking link yet: buttons open a text message to TEXT_NUMBER.
+    // Have a booking link? Paste it between the quotes below, e.g.
+    //   var BOOKING_LINK = 'https://booksy.com/your-shop';
+    // and every booking button will open that page instead.
+    var BOOKING_LINK = '';
+    var TEXT_NUMBER = '[PHONE NUMBER]';
+    var TEXT_MESSAGE = "Hi, I'd like to book a cut.";
+    // =================================================
+
     (function () {
+      // Point every booking button at the booking link, or a pre-filled text
+      document.querySelectorAll('[data-book]').forEach(function (a) {
+        if (BOOKING_LINK) {
+          a.href = BOOKING_LINK;
+          a.target = '_blank';
+          a.rel = 'noopener';
+        } else {
+          a.href = 'sms:' + TEXT_NUMBER + '?&body=' + encodeURIComponent(TEXT_MESSAGE);
+        }
+      });
+
       // Scroll reveal
       var items = document.querySelectorAll('.reveal');
       if ('IntersectionObserver' in window) {
