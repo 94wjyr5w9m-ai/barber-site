@@ -1,0 +1,2 @@
+business,owner_name,phone,email,website,niche,city,google_rating,review_count,status,first_contact,last_touch,touch_count,next_step,next_step_date,deal_value_monthly,notes
+EXAMPLE - Mike's Plumbing,Mike Rivera,(555) 010-0000,mike@example.com,mikesplumbing.example.com,Plumbing,Atlanta,4.4,128,contacted,2026-10-05,2026-10-05,1,Call back,2026-10-07,,Didn't answer at 6pm mystery-shop call. Voicemail left.
