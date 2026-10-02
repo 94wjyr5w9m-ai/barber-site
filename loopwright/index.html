@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Loopwright</title>
+<meta name="description" content="Loopwright builds and runs AI automations for the repetitive work in your business: invoices, intake, support triage and reporting. Join the waitlist.">
+<meta property="og:title" content="Loopwright — AI automation, built and run for you">
+<meta property="og:description" content="We find the work your team repeats every week, automate it with AI, and keep it running. Join the waitlist.">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23182230'/%3E%3Cpath d='M9 20a5 5 0 1 1 5-5v2a5 5 0 1 0 5-5' fill='none' stroke='%23F2A93B' stroke-width='3' stroke-linecap='round'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: workshop ledger — a left-weighted hero beside a live "run log", then plain ruled sections on a cool paper ground. */
+:root {
+  --paper: #EDF0F2;
+  --panel: #F8FAFB;
+  --ink: #182230;
+  --ink-soft: #4A5767;
+  --rule: #CDD4DB;
+  --amber: #F2A93B;
+  --amber-ink: #8A5300;
+  --ok: #1F7A4D;
+  --log-bg: #182230;
+  --log-fg: #DCE3EA;
+  --log-dim: #8795A6;
+
+  --display: "Bricolage Grotesque", "Avenir Next", "Segoe UI", system-ui, sans-serif;
+  --body: "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+
+  --step--1: 0.875rem;
+  --step-0: 1.0625rem;
+  --step-1: 1.3rem;
+  --step-2: 1.75rem;
+  --step-3: clamp(2.3rem, 5vw, 3.6rem);
+  --wrap: 72rem;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #11171F; --panel: #19212C; --ink: #E6EBF0; --ink-soft: #A3AFBD;
+    --rule: #2B3644; --amber: #F2A93B; --amber-ink: #F5BC66; --ok: #5CC892;
+    --log-bg: #0A0F15; --log-fg: #DCE3EA; --log-dim: #7A8899;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --paper: #11171F; --panel: #19212C; --ink: #E6EBF0; --ink-soft: #A3AFBD;
+  --rule: #2B3644; --amber: #F2A93B; --amber-ink: #F5BC66; --ok: #5CC892;
+  --log-bg: #0A0F15; --log-fg: #DCE3EA; --log-dim: #7A8899;
+  color-scheme: dark;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0; background: var(--paper); color: var(--ink);
+  font: 400 var(--step-0)/1.6 var(--body);
+  -webkit-font-smoothing: antialiased;
+}
+.wrap { max-width: var(--wrap); margin-inline: auto; padding-inline: clamp(16px, 4vw, 40px); }
+a { color: inherit; }
+h1, h2, h3 { font-family: var(--display); line-height: 1.05; margin: 0; text-wrap: balance; letter-spacing: -0.02em; }
+p { margin: 0; }
+:focus-visible { outline: 3px solid var(--amber); outline-offset: 2px; border-radius: 4px; }
+[hidden] { display: none !important; }
+
+/* Nav */
+.nav { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding-block: 22px; }
+.brand { display: flex; align-items: center; gap: 10px; font: 800 1.35rem var(--display); letter-spacing: -0.03em; text-decoration: none; }
+.brand svg { width: 30px; height: 30px; flex: none; }
+.nav-links { display: flex; gap: 24px; font-size: var(--step--1); color: var(--ink-soft); }
+.nav-links a { text-decoration: none; }
+.nav-links a:hover { color: var(--ink); }
+
+/* Hero */
+.hero { display: grid; grid-template-columns: 1.05fr 0.95fr; gap: clamp(32px, 5vw, 64px); align-items: start; padding-block: clamp(32px, 6vw, 72px) clamp(48px, 7vw, 96px); }
+.hero > * { min-width: 0; }
+.eyebrow { font: 500 var(--step--1) var(--mono); color: var(--amber-ink); letter-spacing: 0.04em; text-transform: uppercase; margin-bottom: 18px; }
+.hero h1 { font-size: var(--step-3); font-weight: 800; }
+.hero h1 em { font-style: normal; background: linear-gradient(transparent 62%, color-mix(in srgb, var(--amber) 55%, transparent) 62%); padding-inline: 0.06em; }
+.lede { margin-top: 22px; font-size: var(--step-1); line-height: 1.5; color: var(--ink-soft); max-width: 34ch; }
+
+/* Waitlist form */
+.waitlist { margin-top: 32px; display: grid; gap: 12px; max-width: 30rem; }
+.field-row { display: flex; gap: 10px; flex-wrap: wrap; }
+.field-row > * { flex: 1 1 13rem; min-width: 0; }
+.field-row select { flex: 2 1 16rem; }
+.field-row .btn { flex: 1 1 10rem; }
+label.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.waitlist input, .waitlist select {
+  font: inherit; font-size: 1rem; color: var(--ink); background: var(--panel);
+  border: 1.5px solid var(--rule); border-radius: 10px; padding: 13px 14px; width: 100%;
+}
+.waitlist input:focus, .waitlist select:focus { border-color: var(--ink); outline: none; }
+.btn {
+  font: 600 1rem var(--body); cursor: pointer; border: 0; border-radius: 10px;
+  padding: 14px 22px; background: var(--ink); color: var(--paper);
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  transition: transform .15s ease, background .15s ease;
+}
+.btn:hover { transform: translateY(-1px); }
+.btn:disabled { opacity: .6; cursor: progress; transform: none; }
+.form-note { font-size: var(--step--1); color: var(--ink-soft); }
+.form-msg { font-size: var(--step--1); font-weight: 500; }
+.form-msg.err { color: #C0392B; }
+.success { margin-top: 32px; max-width: 30rem; padding: 20px 22px; border: 1.5px solid var(--ok); border-radius: 12px; background: var(--panel); }
+.success strong { display: block; font: 700 var(--step-1) var(--display); margin-bottom: 4px; }
+.hp { position: absolute; left: -9999px; }
+
+/* Run log */
+.log {
+  background: var(--log-bg); color: var(--log-fg); border-radius: 14px;
+  font: 400 0.85rem/1.55 var(--mono); overflow: hidden;
+  box-shadow: 0 1px 0 rgba(0,0,0,.04), 0 24px 48px -24px rgba(24,34,48,.45);
+}
+.log-head { display: flex; justify-content: space-between; gap: 12px; padding: 14px 18px; border-bottom: 1px solid rgba(255,255,255,.08); color: var(--log-dim); font-size: 0.78rem; }
+.log-head b { color: var(--log-fg); font-weight: 500; }
+.log ol { list-style: none; margin: 0; padding: 10px 0 12px; overflow-x: auto; }
+.log li { display: grid; grid-template-columns: 4.6rem 1.2rem 1fr; gap: 8px; padding: 5px 18px; white-space: nowrap; transition: background .3s ease; }
+.log li .t { color: var(--log-dim); font-variant-numeric: tabular-nums; }
+.log li .s { color: var(--ok); }
+.log li .msg { white-space: normal; }
+.log li .msg span { color: var(--amber); }
+.log li.active { background: rgba(242,169,59,.12); }
+.log li.active .s { color: var(--amber); }
+.log-foot { display: flex; flex-wrap: wrap; gap: 6px 18px; padding: 12px 18px 16px; border-top: 1px solid rgba(255,255,255,.08); color: var(--log-dim); font-size: 0.78rem; }
+.log-foot b { color: var(--log-fg); font-weight: 500; font-variant-numeric: tabular-nums; }
+
+/* Sections */
+section.block { border-top: 1.5px solid var(--rule); padding-block: clamp(48px, 7vw, 88px); }
+.block-head { display: grid; grid-template-columns: 1fr 1.4fr; gap: 24px 48px; align-items: end; margin-bottom: 40px; }
+.block-head > * { min-width: 0; }
+.block-head h2 { font-size: var(--step-2); font-weight: 700; }
+.block-head p { color: var(--ink-soft); max-width: 52ch; }
+
+.workflows { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0; border-top: 1px solid var(--rule); }
+.wf { padding: 26px 28px 28px 0; border-bottom: 1px solid var(--rule); display: grid; gap: 10px; align-content: start; }
+.wf:nth-child(odd) { border-right: 1px solid var(--rule); }
+.wf:nth-child(even) { padding-left: 28px; padding-right: 0; }
+.wf h3 { font-size: var(--step-1); font-weight: 700; }
+.wf p { color: var(--ink-soft); }
+.wf .chain { font: 400 0.8rem/1.5 var(--mono); color: var(--ink-soft); }
+.wf .chain b { color: var(--ink); font-weight: 500; }
+.wf .saved { font: 500 var(--step--1) var(--mono); color: var(--amber-ink); }
+
+.steps { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 32px; list-style: none; padding: 0; margin: 0; }
+.steps li { display: grid; gap: 10px; align-content: start; }
+.steps li::before { content: "Week " attr(data-week); font: 500 var(--step--1) var(--mono); color: var(--amber-ink); }
+.steps h3 { font-size: var(--step-1); font-weight: 700; }
+.steps p { color: var(--ink-soft); }
+
+.faq { display: grid; gap: 0; max-width: 48rem; }
+.faq details { border-bottom: 1px solid var(--rule); padding-block: 18px; }
+.faq details:first-child { border-top: 1px solid var(--rule); }
+.faq summary { cursor: pointer; font: 600 var(--step-0) var(--body); list-style: none; display: flex; justify-content: space-between; gap: 16px; }
+.faq summary::-webkit-details-marker { display: none; }
+.faq summary::after { content: "+"; font-family: var(--mono); color: var(--ink-soft); }
+.faq details[open] summary::after { content: "–"; }
+.faq details p { margin-top: 10px; color: var(--ink-soft); max-width: 62ch; }
+
+.cta { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 24px; background: var(--ink); color: var(--paper); border-radius: 18px; padding: clamp(28px, 5vw, 48px); }
+.cta h2 { font-size: var(--step-2); max-width: 22ch; }
+.cta .btn { background: var(--amber); color: #182230; }
+
+footer { padding-block: 40px 56px; color: var(--ink-soft); font-size: var(--step--1); display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; }
+
+@media (max-width: 860px) {
+  .hero, .block-head { grid-template-columns: 1fr; }
+  .steps { grid-template-columns: 1fr; }
+  .nav-links { display: none; }
+}
+@media (max-width: 640px) {
+  .workflows { grid-template-columns: 1fr; }
+  .wf, .wf:nth-child(even) { padding: 22px 0; border-right: 0; }
+  .wf:nth-child(odd) { border-right: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .btn, .log li { transition: none; }
+}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <nav class="nav" aria-label="Main">
+    <a class="brand" href="#">
+      <svg viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="7" fill="var(--ink)"/><path d="M9 20a5 5 0 1 1 5-5v2a5 5 0 1 0 5-5" fill="none" stroke="var(--amber)" stroke-width="3" stroke-linecap="round"/></svg>
+      Loopwright
+    </a>
+    <div class="nav-links">
+      <a href="#workflows">What we automate</a>
+      <a href="#process">How it works</a>
+      <a href="#faq">FAQ</a>
+    </div>
+  </nav>
+
+  <header class="hero" id="waitlist">
+    <div>
+      <p class="eyebrow">Now booking pilot clients · Q1 2027</p>
+      <h1>Your team's busywork, <em>built into</em> AI workflows that run themselves.</h1>
+      <p class="lede">Loopwright finds the tasks your team repeats every week, automates them with AI, and keeps them running. You get the hours back. We handle the plumbing.</p>
+
+      <form class="waitlist" id="waitlist-form" name="waitlist" method="POST" data-netlify="true" netlify-honeypot="bot-field" novalidate>
+        <input type="hidden" name="form-name" value="waitlist">
+        <p class="hp"><label>Leave this empty <input name="bot-field" tabindex="-1" autocomplete="off"></label></p>
+        <div class="field-row">
+          <label class="sr" for="wl-email">Work email</label>
+          <input id="wl-email" name="email" type="email" placeholder="you@company.com" autocomplete="email" required>
+          <label class="sr" for="wl-company">Company</label>
+          <input id="wl-company" name="company" type="text" placeholder="Company (optional)" autocomplete="organization">
+        </div>
+        <div class="field-row">
+          <label class="sr" for="wl-first">What would you automate first?</label>
+          <select id="wl-first" name="first_workflow">
+            <option value="">What would you automate first?</option>
+            <option>Invoices &amp; bookkeeping</option>
+            <option>Lead intake &amp; CRM updates</option>
+            <option>Customer support triage</option>
+            <option>Reporting &amp; dashboards</option>
+            <option>Something else</option>
+          </select>
+          <button class="btn" type="submit" id="wl-submit">Join the waitlist</button>
+        </div>
+        <p class="form-msg" id="wl-msg" role="status" aria-live="polite"></p>
+        <p class="form-note">No spam. One email when your pilot slot opens.</p>
+      </form>
+
+      <div class="success" id="wl-success" hidden>
+        <strong>You're on the list.</strong>
+        <p>We'll write to <span id="wl-success-email"></span> when a pilot slot opens. Pilot clients get the first workflow built at no cost.</p>
+      </div>
+    </div>
+
+    <figure class="log" aria-label="Example automation run" style="margin:0">
+      <div class="log-head"><span><b>invoice-to-ledger</b> · run #4,812</span><span>example run</span></div>
+      <ol id="log">
+        <li><span class="t">09:14:02</span><span class="s">✓</span><span class="msg">Email received from <span>billing@northpine.co</span></span></li>
+        <li><span class="t">09:14:03</span><span class="s">✓</span><span class="msg">PDF read: invoice INV-2291, 14 line items, <span>$3,482.50</span></span></li>
+        <li><span class="t">09:14:05</span><span class="s">✓</span><span class="msg">Matched to purchase order <span>PO-0617</span> (amounts agree)</span></li>
+        <li><span class="t">09:14:06</span><span class="s">✓</span><span class="msg">Coded to 6100 · Office supplies, net-30</span></li>
+        <li><span class="t">09:14:08</span><span class="s">✓</span><span class="msg">Draft bill created in <span>QuickBooks</span></span></li>
+        <li><span class="t">09:14:09</span><span class="s">✓</span><span class="msg">Approval request sent to <span>#finance</span> in Slack</span></li>
+      </ol>
+      <figcaption class="log-foot"><span>Elapsed <b>7s</b></span><span>Manual time replaced <b>~12 min</b></span><span>Human review <b>1 click</b></span></figcaption>
+    </figure>
+  </header>
+
+  <section class="block" id="workflows">
+    <div class="block-head">
+      <h2>What we automate</h2>
+      <p>We start with the work that is repetitive, rules-based and annoying, and that someone on your team does by hand today. These are the most common first projects.</p>
+    </div>
+    <div class="workflows">
+      <article class="wf">
+        <h3>Invoices &amp; bookkeeping</h3>
+        <p>Invoices arrive by email, get read, matched to purchase orders, coded and drafted in your accounting tool for approval.</p>
+        <p class="chain"><b>Gmail</b> → <b>AI extraction</b> → <b>QuickBooks / Xero</b></p>
+        <p class="saved">Typical: 6–10 hrs saved per week</p>
+      </article>
+      <article class="wf">
+        <h3>Lead intake &amp; CRM</h3>
+        <p>New inquiries are enriched, scored and routed to the right person, with the CRM record filled in before anyone opens it.</p>
+        <p class="chain"><b>Web forms</b> → <b>AI scoring</b> → <b>HubSpot / Salesforce</b></p>
+        <p class="saved">Typical: reply time down from hours to minutes</p>
+      </article>
+      <article class="wf">
+        <h3>Support triage</h3>
+        <p>Every ticket is tagged, prioritized and given a drafted reply that your agent edits and sends. Urgent ones are escalated straight away.</p>
+        <p class="chain"><b>Zendesk / Intercom</b> → <b>AI draft</b> → <b>Agent review</b></p>
+        <p class="saved">Typical: 40% less time per ticket</p>
+      </article>
+      <article class="wf">
+        <h3>Reporting</h3>
+        <p>The Monday numbers are pulled from every tool, summarized in plain language and posted where your team already looks.</p>
+        <p class="chain"><b>Stripe, Sheets, ads</b> → <b>AI summary</b> → <b>Slack / email</b></p>
+        <p class="saved">Typical: a half-day of reporting, gone</p>
+      </article>
+    </div>
+  </section>
+
+  <section class="block" id="process">
+    <div class="block-head">
+      <h2>How an engagement works</h2>
+      <p>No platform to learn and no six-month project. You get one working automation within two weeks, then we expand from there.</p>
+    </div>
+    <ol class="steps">
+      <li data-week="1">
+        <h3>Workflow audit</h3>
+        <p>A 45-minute call and a look at how work moves through your tools. We pick the one workflow with the clearest payback.</p>
+      </li>
+      <li data-week="2">
+        <h3>Build &amp; test</h3>
+        <p>We build the automation against your real data, with a human approval step wherever money or customers are involved.</p>
+      </li>
+      <li data-week="3+">
+        <h3>Run &amp; improve</h3>
+        <p>We monitor every run, fix what breaks, and send you a monthly report of hours saved. Cancel any month.</p>
+      </li>
+    </ol>
+  </section>
+
+  <section class="block" id="faq">
+    <div class="block-head">
+      <h2>Questions</h2>
+      <p>Anything else, ask us when your pilot slot opens.</p>
+    </div>
+    <div class="faq">
+      <details>
+        <summary>Do we need technical staff to use this?</summary>
+        <p>No. We build, host and maintain everything. Your team keeps using the tools they already use; the work simply shows up done, or ready to approve.</p>
+      </details>
+      <details>
+        <summary>What happens when the AI gets something wrong?</summary>
+        <p>Every workflow has confidence checks. Anything uncertain goes to a person for review instead of being processed automatically, and anything involving payments or customer messages needs a human approval by default.</p>
+      </details>
+      <details>
+        <summary>Where does our data go?</summary>
+        <p>Data stays in your existing tools and is processed only to run your workflows. We don't use your data to train models, and we sign an NDA and DPA before we touch anything.</p>
+      </details>
+      <details>
+        <summary>What does it cost?</summary>
+        <p>Pilot clients get their first workflow built free. After that, pricing is a flat monthly fee per workflow, quoted up front after the audit.</p>
+      </details>
+    </div>
+  </section>
+
+  <section class="block" style="border-top:0; padding-top:0">
+    <div class="cta">
+      <h2>Ten pilot slots. First workflow built free.</h2>
+      <a class="btn" href="#waitlist">Join the waitlist</a>
+    </div>
+  </section>
+
+  <footer>
+    <span>© 2026 Loopwright</span>
+    <span>AI automation, built and run for you.</span>
+  </footer>
+</div>
+
+<script>
+/*
+  Waitlist delivery.
+  - Hosted on Netlify: leave FORM_ENDPOINT empty. Signups go to Netlify Forms
+    (Site → Forms in the Netlify dashboard; turn on form detection once).
+  - Hosted anywhere else: create a free form at formspree.io and paste its
+    endpoint, e.g. "https://formspree.io/f/abcdwxyz".
+*/
+var FORM_ENDPOINT = "";
+
+(function () {
+  var form = document.getElementById("waitlist-form");
+  var msg = document.getElementById("wl-msg");
+  var btn = document.getElementById("wl-submit");
+  var email = document.getElementById("wl-email");
+
+  form.addEventListener("submit", function (e) {
+    e.preventDefault();
+    msg.textContent = ""; msg.className = "form-msg";
+    var value = email.value.trim();
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
+      msg.textContent = "Enter a valid email address, like you@company.com.";
+      msg.className = "form-msg err";
+      email.focus();
+      return;
+    }
+    btn.disabled = true; btn.textContent = "Joining…";
+    var data = new FormData(form);
+    var req = FORM_ENDPOINT
+      ? fetch(FORM_ENDPOINT, { method: "POST", body: data, headers: { Accept: "application/json" } })
+      : fetch("/", { method: "POST", headers: { "Content-Type": "application/x-www-form-urlencoded" }, body: new URLSearchParams(data).toString() });
+    req.then(function (res) {
+      if (!res.ok) throw new Error("status " + res.status);
+      document.getElementById("wl-success-email").textContent = value;
+      form.hidden = true;
+      document.getElementById("wl-success").hidden = false;
+    }).catch(function () {
+      msg.textContent = "We couldn't save your signup. Check your connection and try again.";
+      msg.className = "form-msg err";
+      btn.disabled = false; btn.textContent = "Join the waitlist";
+    });
+  });
+
+  // Step a highlight through the example run log.
+  var rows = document.querySelectorAll("#log li");
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches || !rows.length) return;
+  var i = 0;
+  setInterval(function () {
+    rows.forEach(function (r) { r.classList.remove("active"); });
+    rows[i % rows.length].classList.add("active");
+    i++;
+  }, 1400);
+})();
+</script>
+</body>
+</html>
